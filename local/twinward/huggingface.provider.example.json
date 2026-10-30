@@ -1,0 +1,11 @@
+{
+  "label": "huggingface-router",
+  "baseUrl": "https://router.huggingface.co/v1",
+  "models": [
+    { "model": "openai/gpt-oss-120b:cerebras", "displayName": "gpt-oss 120B (HF via Cerebras)", "contextWindow": 131072, "fallbackEnabled": true },
+    { "model": "openai/gpt-oss-20b:groq", "displayName": "gpt-oss 20B (HF via Groq)", "contextWindow": 131072, "fallbackEnabled": true },
+    { "model": "meta-llama/Llama-3.3-70B-Instruct:scaleway", "displayName": "Llama 3.3 70B (HF via Scaleway)", "contextWindow": 131072, "fallbackEnabled": true },
+    { "model": "google/gemma-3-27b-it:deepinfra", "displayName": "Gemma 3 27B (HF via DeepInfra)", "contextWindow": 131072, "fallbackEnabled": true },
+    { "model": "CohereLabs/c4ai-command-a-03-2025:cohere", "displayName": "Command A (HF via Cohere)", "contextWindow": 131072, "fallbackEnabled": true }
+  ]
+}
