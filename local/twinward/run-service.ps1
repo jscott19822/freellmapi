@@ -42,6 +42,7 @@ function Build-Config {
     openrouter = 'OPENROUTER_API_KEY'; nvidia = 'NVIDIA_API_KEY'; cohere = 'COHERE_API_KEY' }
   foreach ($p in $builtin.Keys) {
     $k = Get-Secret $builtin[$p]
+    if (-not $k) { $k = Get-Secret ($builtin[$p] -replace '^([A-Z]+)_', '$1-') }  # tolerate e.g. GROQ-API_KEY
     if ($k) { $keys += [pscustomobject]@{ platform = $p; key = $k; label = 'env' }; $enabled += $p } else { $missing += $p }
   }
   $cfAcct = Get-Secret 'CLOUDFLARE_ACCOUNT_ID'; $cfTok = Get-Secret 'CLOUDFLARE_API_TOKEN'
