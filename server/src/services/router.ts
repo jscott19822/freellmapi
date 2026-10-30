@@ -38,6 +38,7 @@ import { getActiveProfileId } from './profile-models.js';
 import { getClientContext } from '../lib/client-context.js';
 import { customEndpointKeyIds } from './custom-endpoint.js';
 import { isDegraded } from './degradation.js';
+import { isBlockedRoute } from '../lib/origin-block.js';
 import { modelStatsKey, endpointScopeForBaseUrl } from '../lib/endpoint-scope.js';
 import { isToolBenched } from '../lib/tool-capability.js';
 import { parseModelScope, scopeAllows } from '../lib/model-scope.js';
@@ -1902,6 +1903,7 @@ export function routePinnedModel(modelDbId: number, estimatedTokens = 1000, skip
   const db = getDb();
   const entry = getModelChainRow(db, modelDbId);
   if (!entry) return null;
+  if (isBlockedRoute(entry.platform, entry.model_id)) return null;
   // Strict comparison only (#956 review): a pinned slot has no substitute, so
   // refusing on a margin violation would drop the slot outright where the
   // pre-margin behavior was one dispatch attempt (a mid-chain context_too_large
@@ -2166,7 +2168,7 @@ export function routeRequest(estimatedTokens = 1000, skipKeys?: Set<string>, pre
   const strategy = effectiveRoutingStrategy();
   if (strategy !== 'priority') refreshStatsCache(db);
 
-  const chain = (prefetchedChain ?? getActiveChain(db)).filter(e => e.enabled);
+  const chain = (prefetchedChain ?? getActiveChain(db)).filter(e => e.enabled && !isBlockedRoute(e.platform, e.model_id));
 
   const sortedChain = orderChain(chain, strategy, true, task);
 
@@ -2252,7 +2254,7 @@ export function routeRequest(estimatedTokens = 1000, skipKeys?: Set<string>, pre
       const retiredUpstream = pinnedRow
         && getCatalogModelTombstone(db, 'chat', pinnedRow.platform, pinnedRow.model_id)?.source === 'upstream_eol';
 
-      if (pinnedRow && !retiredUpstream) {
+      if (pinnedRow && !retiredUpstream && !isBlockedRoute(pinnedRow.platform, pinnedRow.model_id)) {
         sortedChain.unshift(pinnedRow);
       }
     }

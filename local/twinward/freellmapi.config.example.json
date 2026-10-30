@@ -1,0 +1,16 @@
+{
+  "customProviders": [
+    {
+      "label": "ollama-overkill",
+      "baseUrl": "http://127.0.0.1:11434/v1",
+      "apiKey": "ollama",
+      "models": [
+        { "model": "mistral:7b", "displayName": "Mistral 7B (local)", "contextWindow": 32768, "fallbackEnabled": true },
+        { "model": "gemma3:12b", "displayName": "Gemma 3 12B (local)", "contextWindow": 32768, "fallbackEnabled": true },
+        { "model": "phi4:latest", "displayName": "Phi-4 (local)", "contextWindow": 16384, "fallbackEnabled": true },
+        { "model": "hermes3:latest", "displayName": "Hermes 3 (local)", "contextWindow": 32768, "fallbackEnabled": true }
+      ]
+    }
+  ],
+  "routing": { "strategy": "priority" }
+}

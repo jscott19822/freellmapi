@@ -25,3 +25,8 @@ update-hermes.sh
 
 # Monetization planning — private, never committed
 monetization/
+
+# Twinward local (OVERKILL): real env copy and data stay out of git
+/local/twinward/twinward.env
+/local/twinward/*.local.*
+
